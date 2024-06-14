@@ -1,15 +1,22 @@
 import React from 'react';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
+import { Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+
 
 function App() {
   return (
-    <div>
-      <Signup />
-      <Login />
+    <>
+      <Header />
+      <main>
 
-    </div>
-    
+        <Outlet />
+      </main>
+
+      <Footer />
+
+    </>
+
   );
 }
 
