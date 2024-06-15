@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Loginform from '../assets/form.jpg';
-import { FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,7 +20,7 @@ const Login = () => {
     });
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen bg-gray-700">
+        <div className="relative flex items-center justify-center min-h-screen bg-primary">
             {/* Background image of the login form */}
             <div className='absolute w-full h-full'>
                 <img src={Loginform} alt='login' className='object-cover w-full h-full' />
@@ -34,7 +35,7 @@ const Login = () => {
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type.
                     </p>
                 </div>
-                <div className="flex-1 p-6 md:p-12 bg-white bg-opacity-30 text-black">
+                <div className="flex-1 p-6 md:p-12 bg-white bg-opacity-30 text-black relative">
                     <h2 className="text-2xl font-bold mb-4">Login to Your Account</h2>
                     <Formik
                         initialValues={{ email: '', password: '' }}
@@ -88,8 +89,11 @@ const Login = () => {
                         </button>
                     </div>
                     <div className="mt-4 text-center">
-                        <a href="#" className="text-blue-800">Don't have an account? Register here</a>
+                        <Link to={'/signup'} className="text-blue-800">Don't have an account? Register here</Link>
                     </div>
+                    <Link to="/" className="absolute top-2 right-2 text-gray-800 hover:text-black">
+                        <FaTimes size={24} />
+                    </Link>
                 </div>
             </div>
             <ToastContainer />

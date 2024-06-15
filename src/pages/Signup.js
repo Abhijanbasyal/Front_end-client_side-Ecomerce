@@ -1,14 +1,13 @@
 
 
-
-
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Signupform from '../assets/form.jpg';
-import { FaUser, FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -110,8 +109,11 @@ const Signup = () => {
                         </button>
                     </div>
                     <div className="mt-4 text-center">
-                        <a href="#" className="text-blue-800">Already a member? Login here</a>
+                        <Link to={"/login"} className="text-blue-800 ">Already a member? Login here</Link>
                     </div>
+                    <Link to="/" className="absolute top-2 right-2 text-gray-800 hover:text-black">
+                        <FaTimes size={24} />
+                    </Link>
                 </div>
             </div>
             <ToastContainer />
