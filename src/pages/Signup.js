@@ -1,25 +1,57 @@
-
-
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Signupform from '../assets/form.jpg';
 import { FaUser, FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import APIEndPoints from '../common/APIEndPoints';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
+    const initialValues = {
+        name: '',
+        email: '',
+        password: ''
+    };
+
+    const onSubmit = async (values, { setSubmitting }) => {
+        try {
+            const response = await axios.post(APIEndPoints.signup.url, {
+                name: values.name,
+                email: values.email,
+                password: values.password
+            });
+
+            const dataResponse = response.data;
+
+
+            console.log(dataResponse);
+
+            if (dataResponse.success) {
+                toast.success(dataResponse.message);
+                navigate("/login");
+            } else {
+                toast.error(dataResponse.message);
+            }
+        } catch (error) {
+            toast.error("Registration failed. Please try again.");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     const validationSchema = Yup.object().shape({
-        fullName: Yup.string().required('Full Name is required'),
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        password: Yup.string().required('Password is required')
+        name: Yup.string().required('Name required'),
+        email: Yup.string().email('Invalid email address').required('Email required'),
+        password: Yup.string().required('Password required')
     });
 
     return (
@@ -29,7 +61,7 @@ const Signup = () => {
                 <img src={Signupform} alt='form' className='object-cover w-full h-full' />
             </div>
             {/* Overlay to darken the background image */}
-            <div className="absolute w-full h-full"></div>
+            <div className="absolute w-full h-full bg-black opacity-50"></div>
             {/* Content */}
             <div className="relative z-10 flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-30">
                 <div className="flex-1 p-6 md:p-12 bg-gray-800 bg-opacity-50 text-white">
@@ -41,26 +73,25 @@ const Signup = () => {
                 <div className="flex-1 p-6 md:p-12 bg-white bg-opacity-30 text-black">
                     <h2 className="text-2xl font-bold mb-4">Create An Account</h2>
                     <Formik
-                        initialValues={{ fullName: '', email: '', password: '' }}
+                        initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values, { setSubmitting }) => {
-                            toast.success("Registration successful!");
-                            setSubmitting(false);
-                        }}
+                        onSubmit={onSubmit}
                         validateOnBlur={false}
                         validateOnChange={false}
                     >
-                        {({ errors, touched, validateForm }) => (
+                        {({ errors, touched }) => (
                             <Form>
                                 <div className="mb-4 flex items-center border rounded-md overflow-hidden">
                                     <span className="p-3 bg-gray-200"><FaUser /></span>
                                     <Field
                                         type="text"
-                                        name="fullName"
+                                        name="name"
                                         placeholder="Full Name"
                                         className="w-full p-3 focus:outline-none"
-                                        required
                                     />
+                                    {errors.name && touched.name ? (
+                                        <div className="text-red-500 bg-primary border-white border-2 rounded font-bold text-center px-2">{errors.name}</div>
+                                    ) : null}
                                 </div>
 
                                 <div className="mb-4 flex items-center border rounded-md overflow-hidden">
@@ -70,8 +101,10 @@ const Signup = () => {
                                         name="email"
                                         placeholder="Email Address"
                                         className="w-full p-3 focus:outline-none"
-                                        required
                                     />
+                                    {errors.email && touched.email ? (
+                                        <div className="text-red-500 bg-primary border-white border-2 rounded font-bold text-center px-2">{errors.email}</div>
+                                    ) : null}
                                 </div>
 
                                 <div className="mb-4 flex items-center border rounded-md overflow-hidden">
@@ -81,16 +114,18 @@ const Signup = () => {
                                         name="password"
                                         placeholder="Password"
                                         className="w-full p-3 focus:outline-none"
-                                        required
                                     />
                                     <span className="p-3 cursor-pointer" onClick={togglePasswordVisibility}>
                                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                                     </span>
+                                    {errors.password && touched.password ? (
+                                        <div className="text-red-500 bg-primary border-white border-2 rounded font-bold text-center px-1">{errors.password}</div>
+                                    ) : null}
                                 </div>
 
                                 <div className="mb-4">
                                     <label className="inline-flex items-center">
-                                        <input type="checkbox" className="form-checkbox" />
+                                        <Field type="checkbox" name="terms" className="form-checkbox" />
                                         <span className="ml-2">I agree to the terms of service</span>
                                     </label>
                                 </div>
@@ -116,9 +151,9 @@ const Signup = () => {
                     </Link>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 }
 
 export default Signup;
+

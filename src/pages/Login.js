@@ -20,13 +20,13 @@ const Login = () => {
     });
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen bg-primary">
+        <div className="relative flex items-center justify-center min-h-screen bg-gray-700">
             {/* Background image of the login form */}
             <div className='absolute w-full h-full'>
                 <img src={Loginform} alt='login' className='object-cover w-full h-full' />
             </div>
             {/* Overlay to darken the background image */}
-            <div className="absolute w-full h-full"></div>
+            <div className="absolute w-full h-full bg-black opacity-50"></div>
             {/* Content */}
             <div className="relative z-10 flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-30">
                 <div className="flex-1 p-6 md:p-12 bg-gray-800 bg-opacity-50 text-white">
