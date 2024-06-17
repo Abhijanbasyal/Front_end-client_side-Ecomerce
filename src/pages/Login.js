@@ -3,16 +3,61 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Loginform from '../assets/form.jpg';
 import { FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import APIEndPoints from '../common/APIEndPoints';
+import axios from "axios";
+
+
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    
+    const initialValues = {
+        email: '',
+        password: ''
+    };
+
+    const onSubmit = async (values, { setSubmitting }) => {
+        try {
+            const response = await axios.post(APIEndPoints.login.url, {
+                email: values.email,
+                password: values.password
+            });
+
+            const dataResponse = response.data.message;
+
+            console.log(dataResponse);
+
+
+            toast.success(dataResponse);
+            navigate("/");
+
+
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+                console.log(error.response.data.message)
+            } else {
+                toast.error("An error occurred. Please try again.");
+            }
+        }finally{
+            setSubmitting(false);
+
+        }
+    };
+
+
+
+
+
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -38,15 +83,13 @@ const Login = () => {
                 <div className="flex-1 p-6 md:p-12 bg-white bg-opacity-30 text-black relative">
                     <h2 className="text-2xl font-bold mb-4">Login to Your Account</h2>
                     <Formik
-                        initialValues={{ email: '', password: '' }}
+                         initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values, { setSubmitting }) => {
-                            toast.success("Login successful!");
-                            setSubmitting(false);
-                        }}
+                        onSubmit={onSubmit}
                         validateOnBlur={false}
                         validateOnChange={false}
                     >
+                    
                         {({ errors, touched, validateForm }) => (
                             <Form>
                                 <div className="mb-4 flex items-center border rounded-md overflow-hidden">
@@ -96,7 +139,6 @@ const Login = () => {
                     </Link>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 }

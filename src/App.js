@@ -2,8 +2,7 @@ import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const location = useLocation();
@@ -12,7 +11,7 @@ function App() {
   const shouldShowHeaderFooter = !noHeaderFooterPaths.includes(location.pathname);
   return (
     <>
-      <ToastContainer />
+      <Toaster />
       {shouldShowHeaderFooter && <Header />}
       <main>
 

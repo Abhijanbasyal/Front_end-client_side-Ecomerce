@@ -3,7 +3,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Signupform from '../assets/form.jpg';
 import { FaUser, FaEnvelope, FaLock, FaGoogle, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
+
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import APIEndPoints from '../common/APIEndPoints';
@@ -30,23 +31,28 @@ const Signup = () => {
                 password: values.password
             });
 
-            const dataResponse = response.data;
-
+            const dataResponse = response.data.message;
 
             console.log(dataResponse);
 
-            if (dataResponse.success) {
-                toast.success(dataResponse.message);
-                navigate("/login");
-            } else {
-                toast.error(dataResponse.message);
-            }
+
+            toast.success(dataResponse);
+            navigate("/login");
+
+
         } catch (error) {
-            toast.error("Registration failed. Please try again.");
-        } finally {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+                console.log(error.response.data.message)
+            } else {
+                toast.error("An error occurred. Please try again.");
+            }
+        }finally{
             setSubmitting(false);
+
         }
     };
+
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Name required'),
