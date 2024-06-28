@@ -7,7 +7,11 @@ const APIEndPoints = {
     },
     login: {
         url: `${serverDomain}/api/login`
-    }
+    },
+    currentUser : {
+        url : `${serverDomain}/api/user-details`
+    },
+
 }
 
 export default APIEndPoints;

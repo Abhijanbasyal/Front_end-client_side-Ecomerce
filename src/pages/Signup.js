@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import APIEndPoints from '../common/APIEndPoints';
+import GoogleSign from '../components/GoogleSign';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -144,11 +145,7 @@ const Signup = () => {
                         <span>Or Signup With</span>
                         <span className="border-t flex-grow ml-3"></span>
                     </div>
-                    <div className="flex space-x-3 mt-4">
-                        <button className="w-full p-3 bg-blue-600  text-white rounded-md flex items-center justify-center">
-                            <FaGoogle className="mr-2" /> Google
-                        </button>
-                    </div>
+                    <GoogleSign />
                     <div className="mt-4 text-center">
                         <Link to={"/login"} className="text-blue-800 ">Already a member? Login here</Link>
                     </div>

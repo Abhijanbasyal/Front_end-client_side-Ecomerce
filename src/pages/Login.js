@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -32,12 +33,14 @@ const Login = () => {
                 password: values.password
             });
 
-            const dataResponse = response.data.message;
+            const dataResponse = response.data;
 
             console.log(dataResponse);
+            localStorage.setItem("token", dataResponse.data.token);
 
+            
 
-            toast.success(dataResponse);
+            toast.success(dataResponse.message);
             navigate("/");
 
 
