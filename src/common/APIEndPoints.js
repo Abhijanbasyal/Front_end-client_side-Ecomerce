@@ -2,11 +2,11 @@ const serverDomain = "http://localhost:8000";
 
 
 const APIEndPoints = {
-    signup: {
+    sign_up: {
         url: `${serverDomain}/api/sign-up`
     },
-    login: {
-        url: `${serverDomain}/api/login`
+    sign_in: {
+        url: `${serverDomain}/api/sign-in`
     },
     currentUser : {
         url : `${serverDomain}/api/user-details`
