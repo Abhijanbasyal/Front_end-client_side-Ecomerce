@@ -20,7 +20,7 @@ function App() {
 
         <Toaster />
         {shouldShowHeaderFooter && <Header />}
-        <main>
+        <main className='overflow-hidden'>
 
           <Outlet />
         </main>

@@ -10,7 +10,7 @@ const Header = () => {
   const [cartItems, setCartItems] = useState(3); // Example initial value
 
   return (
-    <header className="w-full bg-primary bg-opacity-90 text-white p-4 shadow-md shadow-black">
+    <header className="w-full bg-primary bg-opacity-90 text-white p-4 shadow-md shadow-black " >
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to={"/"}>

@@ -13,7 +13,7 @@ import APIEndPoints from '../common/APIEndPoints';
 import GoogleSign from '../components/GoogleSign';
 import { IoMdAlert } from "react-icons/io";
 import { motion } from "framer-motion";
-import { FaStarOfLife } from "react-icons/fa6";
+import SignupRules from '../components/SignupRules';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +38,7 @@ const Signup = () => {
             if (dataResponse.success === false) {
                 toast.error(dataResponse.message);
             } else {
-                toast.success(dataResponse);
+                toast.success(dataResponse.message);
                 navigate("/login");
             }
         } catch (error) {
@@ -80,29 +80,10 @@ const Signup = () => {
             <div className='absolute w-full h-full'>
                 <img src={Signupform} alt='form' className='object-cover w-full h-full' />
             </div>
-            <div className="absolute w-full h-full "></div>
+            <div className="absolute w-full h-full bg-black  opacity-80 "></div>
             <div className="relative z-10 flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden bg-opacity-10 backdrop-filter backdrop-blur-lg border border-white border-opacity-30">
-                <div className="flex-1 p-6 md:p-12 bg-gray-800 bg-opacity-50 text-white">
-                    <h1 className="text-3xl font-bold mb-4">Welcome to Logdy</h1>
-                    <p className="mb-8">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type.
-                    </p>
-                    <h2>Follow the rules</h2>
-                    <ul>
-                        <h3>To create a username</h3>
-                        <li className='flex items-center'><FaStarOfLife /><span>username should not be shorter than 4 letter</span></li>
-                        <li className='flex items-center' ><FaStarOfLife /><span>username should not be longer than 15 letter</span></li>
-                    </ul>
-                    <ul>
-                        <h3>To create a password</h3>
-                        <li className='flex items-center'><FaStarOfLife /><span>Password must contain at least 8 characters</span></li>
-                        <li className='flex items-center'><FaStarOfLife /><span>One special character</span></li>
-                        <li className='flex items-center'><FaStarOfLife /><span>One number</span></li>
-                        <li className='flex items-center'><FaStarOfLife /><span>One lowercase</span></li>
-                        <li className='flex items-center'><FaStarOfLife /><span>One uppercase</span></li>
-                    </ul>
 
-                </div>
+                <SignupRules />
                 <div className="flex-1 p-6 md:p-12 bg-white bg-opacity-30 text-black">
                     <h2 className="text-2xl font-bold mb-4">Create An Account</h2>
                     <Formik
@@ -211,7 +192,7 @@ const Signup = () => {
                                         </motion.div>
                                     ) : null}
                                 </div>
-                                <button type="submit" disabled={isSubmitting} className="mt-5 w-full p-3 bg-red-500 text-white rounded-md">
+                                <button type="submit" disabled={isSubmitting} className="mt-5 hover:bg-red-800 w-full p-3 bg-red-500 text-white rounded-md">
                                     {isSubmitting ? 'Loading...' : 'Sign Up'}
                                 </button>
                             </Form>
@@ -226,8 +207,11 @@ const Signup = () => {
                     <div className="mt-4 text-center">
                         <Link to={"/login"} className="text-blue-800">Already a member? Login here</Link>
                     </div>
-                    <Link to="/" className="absolute top-2 right-2 text-gray-800 hover:text-black">
-                        <FaTimes size={24} />
+                    <Link to="/" className="absolute top-1 right-2 text-white   hover:text-black">
+                        <div className='bg-red-900'>
+                            <FaTimes size={24} />
+
+                        </div>
                     </Link>
                 </div>
             </div>
