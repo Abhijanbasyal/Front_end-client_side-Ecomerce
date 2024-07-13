@@ -5,8 +5,12 @@ import LogoEstio from '../assets/LogoEstio.png';
 import { ImSearch } from "react-icons/im";
 import { FaRegHeart, FaShoppingCart, FaUser, FaExchangeAlt } from 'react-icons/fa'; // Import FaExchangeAlt for compare icon
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 const Header = () => {
+
+  const { currentUser } = useSelector(state => state.user);
+
   const [cartItems, setCartItems] = useState(3); // Example initial value
 
   return (
@@ -50,11 +54,17 @@ const Header = () => {
               </span>
             )}
           </div>
-          <Link to={"/login"}>
-            <div className="flex items-center space-x-2">
-              <FaUser />
-              <span className="hidden md:inline">Login</span>
-            </div>
+          <Link to={"/profile"}>
+            {currentUser ? (
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white">
+                <img src={currentUser.UserImage} alt="profile" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+                <div className="flex items-center space-x-2">
+                  <FaUser />
+                  <span className="hidden md:inline">Login</span>
+                </div>
+              )}
           </Link>
         </div>
       </div>

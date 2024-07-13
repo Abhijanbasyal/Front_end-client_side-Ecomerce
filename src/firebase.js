@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.ESTIO_API_KEY,
+  apiKey: process.env.REACT_APP_ESTIO_API_KEY,
   authDomain: "ecommerce-mern-c3997.firebaseapp.com",
   projectId: "ecommerce-mern-c3997",
   storageBucket: "ecommerce-mern-c3997.appspot.com",

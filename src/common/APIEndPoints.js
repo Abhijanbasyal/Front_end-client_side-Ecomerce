@@ -8,9 +8,9 @@ const APIEndPoints = {
     sign_in: {
         url: `${serverDomain}/api/sign-in`
     },
-    currentUser : {
-        url : `${serverDomain}/api/user-details`
-    },
+    google_sign:{
+        url: `${serverDomain}/api/google-sign`
+    }
 
 }
 
