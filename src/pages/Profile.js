@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaBars } from 'react-icons/fa';
@@ -37,8 +38,7 @@ const Profile = () => {
     }, [sidebarOpen]);
 
     const initialValues = {
-        username: '',
-        email: '',
+        email: currentUser.email || '',
         password: '',
         firstName: '',
         lastName: '',
@@ -48,14 +48,21 @@ const Profile = () => {
         gender: ''
     };
 
+    const handleProfileImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Logic to handle profile image update
+            console.log('Profile image updated:', file);
+        }
+    };
+
     return (
-        <div className="flex flex-col md:flex-row h-[80rem] md:h-[52rem] ">
+        <div className="flex flex-col md:flex-row h-[80rem] md:h-[55rem] ">
             {/* Sidebar Toggle Button for Small Screens */}
             <div className="md:hidden flex justify-between items-center p-4 bg-gray-100 border-b">
                 <button onClick={toggleSidebar} className="text-gray-700">
                     <FaBars size={24} />
                 </button>
-                <h3 className="text-lg font-semibold">Profile</h3>
             </div>
 
             {/* Sidebar */}
@@ -75,7 +82,13 @@ const Profile = () => {
                     transition={{ duration: 0.5 }}
                     className="bg-white p-6 rounded-lg shadow-lg shadow-black/50 "
                 >
-                    <h3 className="text-4xl md:text-5xl font-bold mb-14">Personal Information</h3>
+                    <div className="flex justify-start items-center space-x-4 text-4xl md:text-5xl font-bold mb-8">
+                        <label className="cursor-pointer">
+                            <img src={currentUser.UserImage} alt='user' className='w-24 h-24 md:w-32 md:h-32 rounded-full object-cover' />
+                            <input type="file" className="hidden" onChange={handleProfileImageChange} />
+                        </label>
+                        <h3>Personal Information</h3>
+                    </div>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={(values) => {
@@ -119,22 +132,22 @@ const Profile = () => {
                                             <label className="inline-flex items-center">
                                                 <Field type="radio" name="gender" value="male" className="hidden" />
                                                 <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'male' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
-                                                    <IoIosMale className='text-2xl md:text-4xl'/>
+                                                    <IoIosMale className='text-2xl md:text-4xl' />
                                                     <span className="mt-2 text-lg font-bold">Male</span>
                                                 </div>
                                             </label>
                                             <label className="inline-flex items-center ml-6">
                                                 <Field type="radio" name="gender" value="female" className="hidden" />
                                                 <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'female' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
-                                                    <IoFemaleOutline  className='text-2xl md:text-4xl' />
+                                                    <IoFemaleOutline className='text-2xl md:text-4xl' />
                                                     <span className="mt-2 text-lg font-bold">Female</span>
                                                 </div>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex  justify-center md:justify-end  ">
-                                    <button type="submit" className="bg-[#28a2ed] text-white px-4 py-2 rounded-md">Save</button>
+                                <div className="flex justify-center md:justify-end">
+                                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-[#28a2ed]" >Save</button>
                                     <button type="button" className="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Cancel</button>
                                 </div>
                             </Form>
@@ -147,3 +160,4 @@ const Profile = () => {
 }
 
 export default Profile;
+
