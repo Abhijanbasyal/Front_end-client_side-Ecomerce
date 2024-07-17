@@ -1,16 +1,55 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaInbox, FaClock, FaWallet, FaGift, FaShoppingBag, FaInfoCircle, FaSignOutAlt, FaMapMarkerAlt, FaCreditCard, FaBell, FaUsers, FaChevronDown, FaChevronUp, FaPlus, FaBars } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
+import { Formik, Form, Field } from 'formik';
+import { CountryDropdown } from 'react-country-region-selector';
+import ProfileSidebar from '../components/ProfileSidebar';
+import { useSelector } from 'react-redux';
+import { IoIosMale } from "react-icons/io";
+import { IoFemaleOutline } from "react-icons/io5";
 
 const Profile = () => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const sidebarRef = useRef(null);
+    const { currentUser } = useSelector((state) => state.user);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
+    const handleClickOutside = (event) => {
+        if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            setSidebarOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (sidebarOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [sidebarOpen]);
+
+    const initialValues = {
+        username: '',
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        dateOfBirth: '',
+        country: '',
+        gender: ''
+    };
+
     return (
-        <div className="flex flex-col md:flex-row h-screen">
+        <div className="flex flex-col md:flex-row h-[80rem] md:h-[52rem] ">
             {/* Sidebar Toggle Button for Small Screens */}
             <div className="md:hidden flex justify-between items-center p-4 bg-gray-100 border-b">
                 <button onClick={toggleSidebar} className="text-gray-700">
@@ -20,95 +59,13 @@ const Profile = () => {
             </div>
 
             {/* Sidebar */}
-            <div className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-64 bg-gray-100 border-r overflow-y-auto`}>
-                <div className="p-4 flex flex-col items-center">
-                    <img src="https://via.placeholder.com/150" alt="Profile" className="w-20 h-20 rounded-full mb-2" />
-                    <h3 className="text-lg font-semibold">Denis Holland</h3>
-                    <p className="text-gray-600">38.00$</p>
-                </div>
-                <nav className="mt-2 space-y-2">
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaWallet className="mr-3" />
-                        My wallet
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaGift className="mr-3" />
-                        My Rewards
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaShoppingBag className="mr-3" />
-                        My orders
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaInfoCircle className="mr-3" />
-                        Personal Information
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaGift className="mr-3" />
-                        Rewards
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaMapMarkerAlt className="mr-3" />
-                        Addresses
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaCreditCard className="mr-3" />
-                        Payment Methods
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaBell className="mr-3" />
-                        Contact Preferences
-                    </a>
-                    <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                        <FaUsers className="mr-3" />
-                        Social networks
-                    </a>
-                    <button onClick={toggleDropdown} className="flex items-center p-2 text-gray-700 hover:bg-gray-200 w-full focus:outline-none">
-                        <span className="flex-1 text-left">More</span>
-                        {isOpen ? <FaChevronUp className="mr-3" /> : <FaChevronDown className="mr-3" />}
-                    </button>
-                    {isOpen && (
-                        <div>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaGift className="mr-3" />
-                                Important
-                            </a>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaUsers className="mr-3" />
-                                Chats
-                            </a>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaClock className="mr-3" />
-                                Scheduled
-                            </a>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaInbox className="mr-3" />
-                                All Mail
-                            </a>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaPlus className="mr-3" />
-                                Spam
-                            </a>
-                            <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                                <FaInbox className="mr-3" />
-                                Bin
-                            </a>
-                        </div>
-                    )}
-                    <div className="mt-4 border-t">
-                        <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                            <FaPlus className="mr-3" />
-                            Create new label
-                        </a>
-                    </div>
-                    <div className="mt-4 border-t">
-                        <a href="#" className="flex items-center p-2 text-gray-700 hover:bg-gray-200">
-                            <FaSignOutAlt className="mr-3" />
-                            Sign Out
-                        </a>
-                    </div>
-                </nav>
-            </div>
+            <ProfileSidebar
+                sidebarOpen={sidebarOpen}
+                isOpen={isOpen}
+                toggleDropdown={toggleDropdown}
+                sidebarRef={sidebarRef}
+                user={currentUser}
+            />
 
             {/* Main Content */}
             <div className="flex-1 p-4 md:p-8">
@@ -116,46 +73,73 @@ const Profile = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-white p-6 rounded-lg shadow-md"
+                    className="bg-white p-6 rounded-lg shadow-lg shadow-black/50 "
                 >
-                    <h3 className="text-2xl font-semibold mb-4">Personal Information</h3>
-                    <form>
-                        <div className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">First Name</label>
-                                <input type="text" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Denis" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                                <input type="text" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Holland" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="email" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="denis.holland@company.com" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Phone</label>
-                                <input type="text" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="+1 234 567 890" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                                <input type="date" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
-                            </div>
-                            <div className="flex items-center">
-                                <label className="block text-sm font-medium text-gray-700 mr-4">Gender</label>
-                                <div className="flex items-center">
-                                    <input type="radio" name="gender" value="male" className="mr-2" />
-                                    <label className="mr-4">Male</label>
-                                    <input type="radio" name="gender" value="female" className="mr-2" />
-                                    <label>Female</label>
+                    <h3 className="text-4xl md:text-5xl font-bold mb-14">Personal Information</h3>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={(values) => {
+                            console.log(values);
+                        }}
+                    >
+                        {({ values, handleChange, setFieldValue }) => (
+                            <Form>
+                                <div className="grid grid-cols-1 gap-6 mb-12 md:mb-6 md:grid-cols-2">
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">First Name</label>
+                                        <Field type="text" name="firstName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Denis" />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Last Name</label>
+                                        <Field type="text" name="lastName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Holland" />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Email</label>
+                                        <Field type="email" name="email" className="text-black font-bold mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={currentUser.email} disabled />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Phone</label>
+                                        <Field type="text" name="phone" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="+1 234 567 890" />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Date of Birth</label>
+                                        <Field type="date" name="dateOfBirth" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Country</label>
+                                        <CountryDropdown
+                                            value={values.country}
+                                            onChange={(val) => setFieldValue('country', val)}
+                                            classes="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white"
+                                        />
+                                    </div>
+                                    <div className="p-2">
+                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Gender</label>
+                                        <div className="flex items-center mt-1">
+                                            <label className="inline-flex items-center">
+                                                <Field type="radio" name="gender" value="male" className="hidden" />
+                                                <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'male' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
+                                                    <IoIosMale className='text-2xl md:text-4xl'/>
+                                                    <span className="mt-2 text-lg font-bold">Male</span>
+                                                </div>
+                                            </label>
+                                            <label className="inline-flex items-center ml-6">
+                                                <Field type="radio" name="gender" value="female" className="hidden" />
+                                                <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'female' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
+                                                    <IoFemaleOutline  className='text-2xl md:text-4xl' />
+                                                    <span className="mt-2 text-lg font-bold">Female</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="flex justify-end">
-                            <button type="button" className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-                            <button type="button" className="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Cancel</button>
-                        </div>
-                    </form>
+                                <div className="flex  justify-center md:justify-end  ">
+                                    <button type="submit" className="bg-[#28a2ed] text-white px-4 py-2 rounded-md">Save</button>
+                                    <button type="button" className="ml-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Cancel</button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                 </motion.div>
             </div>
         </div>

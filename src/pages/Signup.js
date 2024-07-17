@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import SignupRules from '../components/SignupRules';
 
 const Signup = () => {
+
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
