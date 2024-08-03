@@ -1,4 +1,4 @@
-const serverDomain = "http://localhost:8000";
+const serverDomain = process.env.REACT_APP_SERVER_DOMAIN;
 
 
 const APIEndPoints = {
@@ -10,6 +10,9 @@ const APIEndPoints = {
     },
     google_sign:{
         url: `${serverDomain}/api/google-sign`
+    },
+    user_update:{
+        url: `${serverDomain}/api/updateUser/:id`
     }
 
 }

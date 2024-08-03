@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import SignupRules from '../components/SignupRules';
+import {toast} from "react-hot-toast";
 
 //importing icons
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
@@ -58,6 +59,8 @@ const Login = () => {
             navigate('/');
         } catch (error) {
             dispatch(signInFailure(error.response?.data?.message || error.message));
+            toast.error(error.response.data.message);
+
         } finally {
             setSubmitting(false);
         }
