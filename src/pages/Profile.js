@@ -64,13 +64,12 @@ const Profile = () => {
 
     const initialValues = {
         email: currentUser.email || '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        phone: '',
-        dateOfBirth: '',
-        country: '',
-        gender: ''
+        firstName: currentUser.firstName || '',
+        lastName: currentUser.lastName || '',
+        phoneNumber:currentUser.phoneNumber || '',
+        dateOfBirth: currentUser.dateOfBirth ? new Date(currentUser.dateOfBirth).toISOString().split('T')[0] : '',
+        country: currentUser.country || '',
+        gender: currentUser.gender || ''
     };
 
     const handleFileUpload = (file) => {
@@ -117,9 +116,11 @@ const Profile = () => {
             dispatch(userUpdateStart());
 
 
-            const res = await axios.post(APIEndPoints.user_update.url.replace(':id', currentUser._id), formData)
+            const { data } = await axios.post(APIEndPoints.user_update.url.replace(':id', currentUser._id), values,
+                {
+                    withCredentials: true,
+                })//formdata
 
-            const data = res.data;
 
             if (data.success === false) {
                 dispatch(userUpdateFailure(data.message));
@@ -137,8 +138,11 @@ const Profile = () => {
 
 
         } catch (error) {
-            dispatch(userUpdateFailure(error.message));
-            toast.error(error.message);
+            dispatch(userUpdateFailure(error.response?.data?.message || error.message));
+            toast.error(error.response.data.message);
+        }
+        finally {
+            setSubmitting(false);
         }
 
     }
@@ -196,11 +200,11 @@ const Profile = () => {
                                 <div className="grid grid-cols-1 gap-6 mb-12 md:mb-6 md:grid-cols-2">
                                     <div className="p-2">
                                         <label className="block text-2xl font-bold text-gray-700 pb-2">First Name</label>
-                                        <Field type="text" name="firstName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Denis" />
+                                        <Field type="text" name="firstName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={currentUser.firstName}  />
                                     </div>
                                     <div className="p-2">
                                         <label className="block text-2xl font-bold text-gray-700 pb-2">Last Name</label>
-                                        <Field type="text" name="lastName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Holland" />
+                                        <Field type="text" name="lastName" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={currentUser.lastName} />
                                     </div>
                                     <div className="p-2">
                                         <label className="block text-2xl font-bold text-gray-700 pb-2">Email</label>
@@ -208,7 +212,7 @@ const Profile = () => {
                                     </div>
                                     <div className="p-2">
                                         <label className="block text-2xl font-bold text-gray-700 pb-2">Phone</label>
-                                        <Field type="text" name="phone" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="+1 234 567 890" />
+                                        <Field type="text" name="phone" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" placeholder={currentUser.phoneNumber} />
                                     </div>
                                     <div className="p-2">
                                         <label className="block text-2xl font-bold text-gray-700 pb-2">Date of Birth</label>
@@ -222,25 +226,23 @@ const Profile = () => {
                                             classes="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white"
                                         />
                                     </div>
-                                    <div className="p-2">
-                                        <label className="block text-2xl font-bold text-gray-700 pb-2">Gender</label>
-                                        <div className="flex items-center mt-1">
-                                            <label className="inline-flex items-center">
-                                                <Field type="radio" name="gender" value="male" className="hidden" />
-                                                <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'male' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
-                                                    <IoIosMale className='text-2xl md:text-4xl' />
-                                                    <span className="mt-2 text-lg font-bold">Male</span>
-                                                </div>
-                                            </label>
-                                            <label className="inline-flex items-center ml-4">
-                                                <Field type="radio" name="gender" value="female" className="hidden" />
-                                                <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'female' ? 'bg-pink-500 text-white' : 'border-gray-300'}`}>
-                                                    <IoFemaleOutline className='text-2xl md:text-4xl' />
-                                                    <span className="mt-2 text-lg font-bold">Female</span>
-                                                </div>
-                                            </label>
-                                        </div>
+                                    <div className="flex items-center mt-1">
+                                        <label className="inline-flex items-center">
+                                            <Field type="radio" name="gender" value="male" className="hidden" />
+                                            <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'male' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}>
+                                                <IoIosMale className='text-2xl md:text-4xl' />
+                                                <span className="mt-2 text-lg font-bold">Male</span>
+                                            </div>
+                                        </label>
+                                        <label className="inline-flex items-center ml-4">
+                                            <Field type="radio" name="gender" value="female" className="hidden" />
+                                            <div className={`w-24 h-24 md:w-32 md:h-32 flex flex-col items-center justify-center border-2 rounded-md cursor-pointer ${values.gender === 'female' ? 'bg-pink-500 text-white' : 'border-gray-300'}`}>
+                                                <IoFemaleOutline className='text-2xl md:text-4xl' />
+                                                <span className="mt-2 text-lg font-bold">Female</span>
+                                            </div>
+                                        </label>
                                     </div>
+
                                 </div>
                                 {fileUploadError && (
                                     <div className="text-red-500 text-center mb-4">
